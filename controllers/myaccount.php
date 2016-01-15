@@ -44,7 +44,7 @@ class Myaccount extends CI_Controller {
 				$res['country'] = $this->main_model->getCountry();
 					$this->load->view('common/header');                
 					$this->load->view('common/myaccount_header_logo_form',$data);  
-					$this->load->view('common/navigation');                		   
+				//	$this->load->view('common/navigation');                		   
 //					$this->load->view('myaccount/myaccount',$res);                
 					if($this->uri->segment(3) == 'addplace') {						
 						$this->load->view('myaccount/myaccount',$res);                
@@ -58,48 +58,36 @@ class Myaccount extends CI_Controller {
 //		$_POST = unset('add_place');
 		if(isset($_POST['add_place'])) {
 			
-		$data = array('place_typeID' => $this->sanitize($this->input->post('place_typeID')),
-					  'userID'     => $this->session->userdata['logged_in']['id'],
+		$data = array('place_type_id'	 => $this->sanitize($this->input->post('place_type_id')),
+					  'user_id'    		 => $this->session->userdata['logged_in']['id'],
 					  //'placename'   => $_POST['placename'],
-					  'countryID'	 => $this->sanitize($this->input->post('countryID')),
-					  'StateID'     => $this->sanitize($this->input->post('StateID')),
-					  'cityID' => $this->sanitize($this->input->post('cityID')),
-					  'lon'   => $this->sanitize($this->input->post('lon')),
-					  'lat'    => $this->sanitize($this->input->post('lat')),
-					  'address'  => $this->sanitize($this->input->post('address')),
-					  'description'  => $this->sanitize($this->input->post('description')),
-					  'mobile'      => $this->sanitize($this->input->post('mobile')),
-					  'landline'      => $this->sanitize($this->input->post('landline')),
-					  'rooms' => $this->sanitize($this->input->post('rooms_available')),
-					  'facilities' =>$this->sanitize($this->input->post('facilities')),
-					  'contact_person' => $this->sanitize($this->input->post('contact_person')),
-					  'organisation' => $this->sanitize($this->input->post('organisation')),
+					  'location'			 => $this->sanitize($this->input->post('location')),
+					  'country'			 => $this->sanitize($this->input->post('country')),
+					  'country_code'	 => $this->sanitize($this->input->post('country_code')),
+					  'state'     		 => $this->sanitize($this->input->post('state')),
+					  'state_code'       => $this->sanitize($this->input->post('state_code')),
+					  'city' 			 => $this->sanitize($this->input->post('city')),
+					  'longitude'        => $this->sanitize($this->input->post('longitude')),
+					  'latitude'         => $this->sanitize($this->input->post('latitude')),
+					  'address' 		 => $this->sanitize($this->input->post('address')),
+					  'description'  	 => $this->sanitize($this->input->post('description')),
+					  'mobile'    	     => $this->sanitize($this->input->post('mobile')),
+					  'landline'   	     => $this->sanitize($this->input->post('landline')),
+					  'rooms'			 => $this->sanitize($this->input->post('rooms')),
+					  'facilities' 		 => $this->sanitize($this->input->post('facilities')),
+					  'contact_person'	 => $this->sanitize($this->input->post('contact_person')),
+					  'organisation'	 => $this->sanitize($this->input->post('organisation')),
 					  //'picture' => $filename
 					);
 
-	/*		if($_FILES['userfile']['size'] > 0){
-				$filename = time().$_FILES['userfile']['name'];
-				if(move_uploaded_file($_FILES['userfile']['tmp_name'],'./uploads/'.$filename)){					
-					$data['picture'] = $filename;		
-				} // endif
-			} // endif	
-*/
 			if(!empty($_FILES['userfile']) && $_FILES['userfile']['tmp_name'] !=''){
 				$tmp = explode('.',$_FILES['userfile']['name']);			
 				$profile_image = round(microtime(true)).'.'.end($tmp);
-				if($_FILES['userfile']['error']==0){
-					/* if (is_dir(base_url().'uploads/'.$data['userID'])){  
-						 mkdir(base_url().'uploads/'.$data['userID']);
-					 }
-					 else{
-						
-					 }*/
+				if($_FILES['userfile']['error']==0){					
 					move_uploaded_file($_FILES['userfile']['tmp_name'],"uploads/".$profile_image);
 				}
-				$data['picture'] = $profile_image;
+				$data['image'] = $profile_image;
 			}
-			
-//						echo '<pre>'; print_r($data); die;
 			
 			if(is_int($this->uri->segment(3)) || $this->uri->segment(3) != 'addplace') {
 				$result = $this->main_model->updatefm_Place($data,$this->uri->segment(3));
@@ -115,13 +103,10 @@ class Myaccount extends CI_Controller {
 	 
 		
 	public function deletePlace(){
-			
-			if(isset($_POST['action_id'])){
-						
-					$fm_ID = $_POST['action_id'];
-					
-					$data = $this->main_model->deletePlace($fm_ID);
-						
+		
+			if(isset($_POST['action_id'])){						
+				$fm_ID = $_POST['action_id'];					
+				$data = $this->main_model->deletePlace($fm_ID);						
 			}
 	
 	} // end function deletePlace
@@ -132,17 +117,17 @@ class Myaccount extends CI_Controller {
 			$id =  $this->uri->segment(3);
 			$data['placetype'] = $this->main_model->getPlacetype();
 			$data['country'] = $this->main_model->getCountry();
-		//	echo '<pre>'; print_r($data['country']); die;
-			$data['state'] = $this->main_model->getState($data['country'][0]['countryID']);
-		//	echo '<pre>'; print_r($data['State']); die;
+			//echo '<pre>'; print_r($data['country']); die;
+			$data['state'] = $this->main_model->getState('101');
+			//echo '<pre>'; print_r($data['state']); die;
 			$data['updateRec'] = $this->main_model->updatePlace($id);
-			$data['city'] = $this->main_model->getCity($data['updateRec']['countryID'],$data['updateRec']['StateID']);
+			$data['city'] = $this->main_model->getCity($data['updateRec']['city'],$data['updateRec']['state']);
 			//echo '<pre>'; print_r($data['city']); die;
 			
 			//echo '<pre>'; print_r($data); die;
 					$this->load->view('common/header');                
 					$this->load->view('common/myaccount_header_logo_form');                
-					$this->load->view('common/navigation');                		   
+//					$this->load->view('common/navigation');                		   
 					$this->load->view('myaccount/myaccount',$data);                
 					$this->load->view('common/footer');         	
 			
@@ -202,8 +187,8 @@ class Myaccount extends CI_Controller {
 	******************************/
 
 	function sanitize($in) {
-		$in = addslashes(htmlspecialchars(strip_tags(trim($in))));
-		return @mysql_real_escape_string($in);
+		$in = htmlspecialchars(trim($in));
+		return $in;
 	}
 
 } 
