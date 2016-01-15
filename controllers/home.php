@@ -51,9 +51,9 @@ class Home extends CI_Controller {
 			 
 		// redirect('home', 'refresh');
 	   }
-	   $this->load->view('common/navigation');                		   
-		$this->load->view('common/slider');                		   		
-		$this->load->view('home');
+//	    $this->load->view('common/navigation');                		   
+		//$this->load->view('common/slider');                		   		
+		//$this->load->view('home');
 		$this->load->view('common/footer');	
 	 }
 	 
@@ -61,7 +61,7 @@ class Home extends CI_Controller {
 	*  Verification Email Address
 	******************************/
 	 function verifyMail($confirmation_code=NULL){  
-	 //$confirmation_code = $this->uri->segment(2);	 
+	  
 	  $noRecords = $this->main_model->verifyEmailAddress($confirmation_code);  
 	  if ($noRecords > 0){
 	   $error = "Email Verified Successfully!"; 
@@ -174,7 +174,7 @@ class Home extends CI_Controller {
 		   else{
 			   $this->load->view('common/header_logo_form'); 
 		   }
-		   $this->load->view('common/navigation');                
+//		   $this->load->view('common/navigation');                
 			           		   
 			//$this->load->view('common/slider');                		   
 //			if($this->uri->segment(3)){
@@ -281,10 +281,11 @@ class Home extends CI_Controller {
 	#Get State per country
 	public function showState()
 	{ 
-		$data = $this->main_model->getState($this->input->post('cid'));		
+		$data = $this->main_model->getState($this->input->post('cid'));	
+		echo "<option>--Please Select State--</option>";
 		foreach($data as $dat){
 			
-			echo '<option value="'.$dat->StateID.'">'.$dat->StateName.'</option>';
+			echo '<option value="'.$dat->id.'">'.$dat->name.'</option>';
 			
 		} //endforeach
 		
@@ -293,10 +294,10 @@ class Home extends CI_Controller {
 	public function showCity()
 	{
 		$data = $this->main_model->getCity($_POST['cid'],$_POST['sid']);
-		
+		echo "<option>--Please Select City--</option>";
 		foreach($data as $dat){
 			
-			echo '<option value="'.$dat->CityID.'">'.$dat->CityName.'</option>';
+			echo '<option value="'.$dat->id.'">'.$dat->name.'</option>';
 			
 		} //endforeach
 		
@@ -305,11 +306,13 @@ class Home extends CI_Controller {
 	public function listPlaces() {
 		$fid = $_POST['fid'];
 		$data['type']  =  $_POST['fid'];
-		if($this->input->post('countryID'))	{	
-		$countryID = $this->input->post('countryID');
-		$StateID = $this->input->post('StateID');
-		$cityID =  $this->input->post('cityID');		
-		$data['places'] = $this->main_model->detailfm_place($countryID,$StateID,$cityID,$fid);
+		$this->load->view('common/header');
+
+		if($this->input->post('country'))	{	
+		$countryID = $this->input->post('country');
+		$StateID = $this->input->post('state');
+		$cityID =  $this->input->post('city');		
+		$data['places'] = $this->main_model->detail_places($countryID,$StateID,$cityID,$fid);
 		
 		//echo '<pre>'; print_r($data['places']); echo '</pre>'; 
 		
@@ -324,7 +327,7 @@ class Home extends CI_Controller {
 		      else{
 				   $this->load->view('common/header_logo_form'); 
 		      }
-	        $this->load->view('common/navigation'); 
+//	        $this->load->view('common/navigation'); 
 			$this->load->view('placedetail',$data);
 			$this->load->view('common/footer');		 
 		}
@@ -341,7 +344,7 @@ class Home extends CI_Controller {
 		   else{
 			   $this->load->view('common/header_logo_form'); 
 		   }
-		   $this->load->view('common/navigation'); 
+//		   $this->load->view('common/navigation'); 
 			$data['noFound'] = "No Result Found";
 			$this->load->view('placedetail',$data);
 			$this->load->view('common/footer');		 
