@@ -358,7 +358,7 @@ class Home extends CI_Controller {
 		$id = $this->uri->segment(3);
 		$data['places'] = $this->main_model->getDetailOfPlaces($id);	
 
-                       $this->load->view('common/header');                
+             $this->load->view('common/header');                
 			if($this->session->userdata('logged_in'))
 		   {
 			$session_data = $this->session->userdata('logged_in');
@@ -368,7 +368,7 @@ class Home extends CI_Controller {
 		   else{
 			   $this->load->view('common/header_logo_form'); 
 		   }
-		   $this->load->view('common/navigation'); 
+		   //$this->load->view('common/navigation'); 
 		$this->load->view('place',$data);
 		$this->load->view('common/footer');		 
 	}

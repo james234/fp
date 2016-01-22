@@ -67,17 +67,17 @@
 		<div class="row">
 			<div class="col-md-2 hding">ad space</div>	
 				<div class="col-md-8 hding">					
-					  <div class="col-xs-12 col-md-4">
-						<p class="text-left">Organisation Name: <?=$p->organisation?></p>
-						<p class="text-left"> Phone:<?=$p->mobile?></p>
-						<p class="text-left"> Address:<?=$p->address?></p>
+					  <div class="col-xs-12 col-md-8">
+						<p class="text-left"><strong>Organisation Name: </strong></p><p class="text-left"><?=$p->organisation?></p>
+						<p class="text-left"><strong> Phone:</strong><?=$p->mobile?></p>
+						<p class="text-left"><strong> Address:</strong><?=$p->address?></p>
 						<p class="text-left"> <a href="<?php echo base_url()?>home/detail/<?php echo $p->id;?>">Read More..</a></p>
 					</div>	
-					  <div class="col-xs-12 col-md-8">
+					  <div class="col-xs-12 col-md-4">
 					 <?php if(!empty($p->image)){ ?>
-						<img src="<?=Base_url()?>/uploads/<?=$p->image?>" class="img-responsive">
+						<img src="<?=Base_url()?>uploads/<?=$p->image?>" class="img-responsive">
 					  <?php } else{?>
-					  <img src="<?=Base_url()?>/assets/images/no-image.jpg" class="img-responsive">
+					  <img src="<?=Base_url()?>assets/images/no-image.jpg" class="img-responsive">
 					  <?php } ?></div>					
 				</div>								
 			<div class="col-md-2 hding">ad space</div>			

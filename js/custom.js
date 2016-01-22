@@ -178,7 +178,8 @@ $(document).ready(function(){
 		******************************/
 	
 		
-		 $('input[id=InputEmail]').blur(function() {            
+		 $('input[id=InputEmail]').blur(function() { 
+            $("#Loading").show();
 			var email = $(this).val();
 			$.ajax({			
 				type:'POST',
@@ -210,6 +211,8 @@ $(document).ready(function(){
 		});
 	}); // end delete-Image-delete
 	
+		 
+		 $(".user_image").colorbox({iframe:true, width:"80%", height:"80%"});
 		 
 
 	

@@ -158,6 +158,11 @@ class Main_model extends CI_Model
 	  -----------------------*/	  
 	  function updatefm_place($data,$id){
 
+			$this->db->select("email");
+			$this->db->from('user');
+			$this->db->where('id',$data['user_id']);
+			$query  = $this->db->get();
+			$result = $query->row_array();			
 			$this->load->library('email');		
 			$msg = "Dear User,<br />Your change will be reflect after verification within next 48 hours.Thanks";
 	
@@ -165,11 +170,12 @@ class Main_model extends CI_Model
 			$config['wordwrap'] = TRUE;
 			$config['mailtype'] = 'html';
 
+			$list = array($result['email'], 'admin@example.com');
 			$this->email->initialize($config);
 			
 			$this->email->set_newline("\r\n");
 			$this->email->from('support@clickrideshare.com', "Clickrideshare");
-			$this->email->to($data['email']);  
+			$this->email->to($list);  
 			$this->email->subject("Updation Mail");
 			$this->email->message($msg);
 			
@@ -197,6 +203,7 @@ class Main_model extends CI_Model
 	  function userfm_place($uid,$where = NULL) {	
 			$query = $this->db->from('fm_places');
 			$query = $this->db->where('user_id',$uid);
+			$query = $this->db->where('status','Y');
 			$query = $this->db->get();
 			return $query->result();
 	  
@@ -248,9 +255,11 @@ class Main_model extends CI_Model
 		//Get per Place detail 
 		function getDetailOfPlaces($id){
 			
-			$query = $this->db->query("SELECT f.*,c.countryName,s.StateName,city.CityName FROM fm_places AS f INNER JOIN country AS c ON f.countryID = c.countryID
-			INNER JOIN state AS s ON f.StateID = s.StateID
-			INNER JOIN city AS city ON f.cityID = city.cityID");
+			$query = $this->db->query("SELECT f.*,u.email,c.name as country_name,s.name as state_name,city.name as city_name FROM fm_places AS f 
+			INNER JOIN user AS u on u.id = f.user_id
+			INNER JOIN countries AS c ON f.country = c.id
+			INNER JOIN states AS s ON f.state = s.id
+			INNER JOIN cities AS city ON f.city = city.id");
 		  	
 			return $query->row_array();
 			
