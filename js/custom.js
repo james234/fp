@@ -1,6 +1,6 @@
 //Custom JS
 //var baseUrl = document.location.origin+'/fp/';
-var baseUrl = document.location.origin+'/others/wexplor/';
+var baseUrl = document.location.origin+'/others/fp/';
 
 $(document).ready(function(){
 	
